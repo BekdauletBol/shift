@@ -122,40 +122,40 @@ export default function DreamResult({ result, dreamId }: { result: DreamAnalysis
   };
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="w-full max-w-4xl mx-auto flex flex-col gap-6">
-      <motion.div variants={item} className="bg-white p-6 rounded-2xl shadow-sm border border-black/5">
-        <h3 className="flex items-center gap-2 text-xl font-serif mb-3 text-orange">
-          <Heart className="w-5 h-5" /> Compassion
+    <motion.div variants={container} initial="hidden" animate="show" className="w-full max-w-4xl mx-auto flex flex-col gap-4 sm:gap-6 px-1 sm:px-0">
+      <motion.div variants={item} className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-black/5">
+        <h3 className="flex items-center gap-2 text-lg sm:text-xl font-serif mb-2 sm:mb-3 text-orange">
+          <Heart className="w-5 h-5 flex-shrink-0" /> Compassion
         </h3>
-        <p className="text-black/80 leading-relaxed">{result.empathy}</p>
+        <p className="text-black/80 leading-relaxed text-sm sm:text-base">{result.empathy}</p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <motion.div variants={item} className="bg-white p-6 rounded-2xl shadow-sm border border-black/5">
-          <h3 className="flex items-center gap-2 text-xl font-serif mb-3 text-black">
-            <Brain className="w-5 h-5 text-orange" /> Analysis
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <motion.div variants={item} className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-black/5">
+          <h3 className="flex items-center gap-2 text-lg sm:text-xl font-serif mb-2 sm:mb-3 text-black">
+            <Brain className="w-5 h-5 text-orange flex-shrink-0" /> Analysis
           </h3>
-          <p className="text-black/80 leading-relaxed">{result.analysis}</p>
+          <p className="text-black/80 leading-relaxed text-sm sm:text-base">{result.analysis}</p>
         </motion.div>
 
-        <motion.div variants={item} className="bg-white p-6 rounded-2xl shadow-sm border border-black/5">
-          <h3 className="flex items-center gap-2 text-xl font-serif mb-3 text-black">
-            <Sparkles className="w-5 h-5 text-orange" /> Positive Reframe
+        <motion.div variants={item} className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-black/5">
+          <h3 className="flex items-center gap-2 text-lg sm:text-xl font-serif mb-2 sm:mb-3 text-black">
+            <Sparkles className="w-5 h-5 text-orange flex-shrink-0" /> Positive Reframe
           </h3>
-          <p className="text-black/80 leading-relaxed">{result.reframe}</p>
+          <p className="text-black/80 leading-relaxed text-sm sm:text-base">{result.reframe}</p>
         </motion.div>
       </div>
 
-      <motion.div variants={item} className="bg-black text-white p-6 rounded-2xl shadow-lg relative flex flex-col gap-4">
+      <motion.div variants={item} className="bg-black text-white p-5 sm:p-6 rounded-2xl shadow-lg relative flex flex-col gap-4">
         <div>
-          <h3 className="flex items-center gap-2 text-xl font-serif mb-3 text-orange">
-            <Video className="w-5 h-5" /> Video Prompt (Sora/Runway/Kling)
+          <h3 className="flex items-center gap-2 text-lg sm:text-xl font-serif mb-2 sm:mb-3 text-orange">
+            <Video className="w-5 h-5 flex-shrink-0" /> Video Prompt (Sora/Runway/Kling)
           </h3>
-          <p className="text-white/90 leading-relaxed font-mono text-sm bg-white/10 p-4 rounded-xl relative pr-12">
+          <p className="text-white/90 leading-relaxed font-mono text-xs sm:text-sm bg-white/10 p-3 sm:p-4 rounded-xl relative pr-10 sm:pr-12 break-words">
             {result.video_prompt}
             <button
               onClick={handleCopy}
-              className="absolute top-2 right-2 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute top-2 right-2 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center active:scale-95"
               title="Copy video prompt"
             >
               {copied ? <Check className="w-4 h-4 text-orange" /> : <Copy className="w-4 h-4" />}
@@ -168,17 +168,17 @@ export default function DreamResult({ result, dreamId }: { result: DreamAnalysis
           {videoStatus === "idle" && (
             <button
               onClick={handleGenerateVideo}
-              className="bg-orange hover:bg-[#e55a2b] text-white font-medium py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2"
+              className="bg-orange hover:bg-[#e55a2b] w-full sm:w-auto text-white font-medium py-3 px-6 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95"
             >
               <Video className="w-5 h-5" /> Generate Cartoon Video
             </button>
           )}
 
           {videoStatus === "generating" && (
-            <div className="w-full flex flex-col items-center gap-3 text-white/80 font-medium py-3 px-6 rounded-xl">
-              <div className="flex items-center gap-3">
-                <Loader2 className="w-5 h-5 animate-spin text-orange" />
-                Generating your dream video (~1-3 minutes)...
+            <div className="w-full flex flex-col items-center gap-3 text-white/80 font-medium py-3 px-4 sm:px-6 rounded-xl text-center text-sm sm:text-base">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+                <Loader2 className="w-5 h-5 animate-spin text-orange flex-shrink-0" />
+                <span>Generating your dream video (~1-3 mins)...</span>
               </div>
               <div className="w-full max-w-sm bg-white/10 rounded-full h-2.5 mt-2 overflow-hidden">
                 <div 
@@ -206,38 +206,38 @@ export default function DreamResult({ result, dreamId }: { result: DreamAnalysis
           {videoStatus === "success" && videoUrl && (
             <div className="w-full flex flex-col items-center gap-4 mt-2">
               <div className="w-full max-w-lg aspect-video rounded-xl overflow-hidden bg-black/50 border border-white/10 shadow-inner">
-                <video src={videoUrl} autoPlay loop playsInline className="w-full h-full object-cover" />
+                <video src={videoUrl} autoPlay loop playsInline controls className="w-full h-full object-cover" />
               </div>
               <button
                 onClick={handleDownload}
-                className="bg-white text-black hover:bg-cream font-medium py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2"
+                className="bg-white text-black hover:bg-cream font-medium py-3 px-6 w-full sm:w-auto rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95"
               >
-                <Download className="w-5 h-5" /> Download Video
+                <Download className="w-5 h-5 flex-shrink-0" /> Download Video
               </button>
             </div>
           )}
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <motion.div variants={item} className="bg-orange/10 p-6 rounded-2xl border border-orange/20">
-          <h3 className="flex items-center gap-2 text-xl font-serif mb-3 text-black">
-            <Wind className="w-5 h-5 text-orange" /> 4-7-8 Breathing
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <motion.div variants={item} className="bg-orange/10 p-5 sm:p-6 rounded-2xl border border-orange/20">
+          <h3 className="flex items-center gap-2 text-lg sm:text-xl font-serif mb-2 sm:mb-3 text-black">
+            <Wind className="w-5 h-5 text-orange flex-shrink-0" /> 4-7-8 Breathing
           </h3>
-          <p className="text-black/80 leading-relaxed">{result.breathing_exercise}</p>
+          <p className="text-black/80 leading-relaxed text-sm sm:text-base">{result.breathing_exercise}</p>
         </motion.div>
 
-        <motion.div variants={item} className="bg-[#111111] p-6 rounded-2xl text-white">
-          <h3 className="flex items-center gap-2 text-xl font-serif mb-3 text-orange">
-            <Moon className="w-5 h-5" /> Sleep Technique
+        <motion.div variants={item} className="bg-[#111111] p-5 sm:p-6 rounded-2xl text-white">
+          <h3 className="flex items-center gap-2 text-lg sm:text-xl font-serif mb-2 sm:mb-3 text-orange">
+            <Moon className="w-5 h-5 flex-shrink-0" /> Sleep Technique
           </h3>
-          <p className="text-white/80 leading-relaxed">{result.sleep_technique}</p>
+          <p className="text-white/80 leading-relaxed text-sm sm:text-base">{result.sleep_technique}</p>
         </motion.div>
       </div>
 
-      <motion.div variants={item} className="text-center py-8">
-        <h3 className="text-sm uppercase tracking-widest text-black/50 font-bold mb-4">Grounding Affirmation</h3>
-        <p className="font-serif text-3xl md:text-4xl text-orange italic">&ldquo;{result.affirmation}&rdquo;</p>
+      <motion.div variants={item} className="text-center py-6 sm:py-8 px-2">
+        <h3 className="text-xs sm:text-sm uppercase tracking-widest text-black/50 font-bold mb-3 sm:mb-4">Grounding Affirmation</h3>
+        <p className="font-serif text-2xl sm:text-3xl md:text-4xl text-orange italic leading-tight">&ldquo;{result.affirmation}&rdquo;</p>
       </motion.div>
     </motion.div>
   );

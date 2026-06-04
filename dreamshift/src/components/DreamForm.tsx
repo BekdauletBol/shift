@@ -57,7 +57,7 @@ export default function DreamForm({ onAnalysisResult }: DreamFormProps) {
         <textarea
           id="dream"
           rows={6}
-          className="w-full p-4 rounded-xl border border-black/10 focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-all resize-none bg-white font-sans text-black shadow-sm"
+          className="w-full text-base sm:text-lg p-4 rounded-xl border border-black/10 focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-all resize-none bg-white font-sans text-black shadow-sm"
           placeholder="I was running through a dark forest..."
           value={dream}
           onChange={(e) => setDream(e.target.value)}
@@ -67,7 +67,7 @@ export default function DreamForm({ onAnalysisResult }: DreamFormProps) {
         <button
           type="submit"
           disabled={loading || !dream.trim()}
-          className="bg-black hover:bg-black/90 disabled:bg-black/50 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg w-full sm:w-auto self-end"
+          className="bg-black hover:bg-black/90 disabled:bg-black/50 text-white font-medium py-4 sm:py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg w-full sm:w-auto self-end text-lg sm:text-base active:scale-95"
         >
           {loading ? (
             <>

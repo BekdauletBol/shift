@@ -16,6 +16,7 @@ const dmSerif = DM_Serif_Display({
 export const metadata: Metadata = {
   title: "DreamShift - Dream Therapy",
   description: "Identify core fears and reframe nightmares with AI.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",
 };
 
 export default function RootLayout({

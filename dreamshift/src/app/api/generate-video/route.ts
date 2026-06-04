@@ -15,12 +15,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "video_prompt is required" }, { status: 400 });
     }
 
-    const enhancedPrompt = `${video_prompt}, Studio Ghibli style, cartoon, healing, warm light, cinematic`;
-
     const prediction = await replicate.predictions.create({
       model: "wavespeedai/wan-2.1-t2v-480p",
       input: {
-        prompt: enhancedPrompt,
+        prompt: video_prompt,
       }
     });
 

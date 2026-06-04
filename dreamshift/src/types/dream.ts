@@ -13,5 +13,6 @@ export interface DreamDocument {
   _id?: string;
   dream: string;
   result: DreamAnalysisResponse;
+  video_url?: string;
   createdAt: Date;
 }

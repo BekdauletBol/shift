@@ -9,6 +9,7 @@ import { DreamAnalysisResponse } from "@/types/dream";
 
 export default function Home() {
   const [result, setResult] = useState<DreamAnalysisResponse | null>(null);
+  const [dreamId, setDreamId] = useState<string | null>(null);
 
   return (
     <main className="flex flex-col items-center min-h-screen p-6 sm:p-12 md:p-24 bg-cream text-black selection:bg-orange selection:text-white">
@@ -39,7 +40,10 @@ export default function Home() {
               transition={{ duration: 0.3 }}
               className="w-full"
             >
-              <DreamForm onAnalysisResult={setResult} />
+              <DreamForm onAnalysisResult={(res, id) => {
+                setResult(res);
+                setDreamId(id);
+              }} />
             </motion.div>
           ) : (
             <motion.div
@@ -49,12 +53,15 @@ export default function Home() {
               className="w-full flex flex-col gap-8"
             >
               <button 
-                onClick={() => setResult(null)}
+                onClick={() => {
+                  setResult(null);
+                  setDreamId(null);
+                }}
                 className="text-black/50 hover:text-orange self-start transition-colors font-medium font-sans flex items-center gap-2 group"
               >
                 ← <span className="group-hover:underline">Analyze another dream</span>
               </button>
-              <DreamResult result={result} />
+              <DreamResult result={result} dreamId={dreamId} />
             </motion.div>
           )}
         </AnimatePresence>

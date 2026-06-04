@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { DreamAnalysisResponse } from "@/types/dream";
 
 interface DreamFormProps {
-  onAnalysisResult: (result: DreamAnalysisResponse) => void;
+  onAnalysisResult: (result: DreamAnalysisResponse, dreamId: string) => void;
 }
 
 export default function DreamForm({ onAnalysisResult }: DreamFormProps) {
@@ -35,7 +35,7 @@ export default function DreamForm({ onAnalysisResult }: DreamFormProps) {
       }
 
       const data = await res.json();
-      onAnalysisResult(data.result);
+      onAnalysisResult(data.result, data._id);
     } catch (err: any) {
       setError(err.message || "An error occurred");
     } finally {

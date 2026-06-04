@@ -5,12 +5,13 @@ import { motion } from "framer-motion";
 import { Copy, Check, Wind, Moon, Brain, Sparkles, Heart, Video, Loader2, Download } from "lucide-react";
 import { DreamAnalysisResponse } from "@/types/dream";
 
-export default function DreamResult({ result }: { result: DreamAnalysisResponse }) {
+export default function DreamResult({ result, dreamId }: { result: DreamAnalysisResponse, dreamId: string | null }) {
   const [copied, setCopied] = useState(false);
   const [videoStatus, setVideoStatus] = useState<"idle" | "generating" | "success" | "error">("idle");
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [predictionId, setPredictionId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(result.video_prompt);
@@ -27,7 +28,7 @@ export default function DreamResult({ result }: { result: DreamAnalysisResponse 
       const res = await fetch("/api/generate-video", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ video_prompt: result.video_prompt }),
+        body: JSON.stringify({ video_prompt: result.video_prompt, dreamId }),
       });
       
       const data = await res.json();
@@ -44,11 +45,28 @@ export default function DreamResult({ result }: { result: DreamAnalysisResponse 
   };
 
   useEffect(() => {
+    if (videoStatus !== "generating") {
+      setProgress(0);
+      return;
+    }
+
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 98) return prev;
+        const increment = prev < 80 ? 1 : 0.2;
+        return prev + increment;
+      });
+    }, 1500);
+
+    return () => clearInterval(progressInterval);
+  }, [videoStatus]);
+
+  useEffect(() => {
     if (!predictionId || videoStatus !== "generating") return;
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/generate-video?id=${predictionId}`);
+        const res = await fetch(`/api/generate-video?id=${predictionId}&dreamId=${dreamId || ""}`);
         if (!res.ok) throw new Error("Polling failed");
         const data = await res.json();
 
@@ -157,9 +175,17 @@ export default function DreamResult({ result }: { result: DreamAnalysisResponse 
           )}
 
           {videoStatus === "generating" && (
-            <div className="flex items-center gap-3 text-white/80 font-medium bg-white/5 py-3 px-6 rounded-xl">
-              <Loader2 className="w-5 h-5 animate-spin text-orange" />
-              Generating your dream video...
+            <div className="w-full flex flex-col items-center gap-3 text-white/80 font-medium py-3 px-6 rounded-xl">
+              <div className="flex items-center gap-3">
+                <Loader2 className="w-5 h-5 animate-spin text-orange" />
+                Generating your dream video (~1-3 minutes)...
+              </div>
+              <div className="w-full max-w-sm bg-white/10 rounded-full h-2.5 mt-2 overflow-hidden">
+                <div 
+                  className="bg-orange h-2.5 rounded-full transition-all duration-500 ease-out" 
+                  style={{ width: `${Math.round(progress)}%` }}
+                ></div>
+              </div>
             </div>
           )}
 

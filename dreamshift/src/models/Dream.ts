@@ -16,6 +16,7 @@ const DreamSchema = new Schema<DreamDocument>({
     sleep_technique: String,
     affirmation: String,
   },
+  video_url: String,
   createdAt: {
     type: Date,
     default: Date.now,

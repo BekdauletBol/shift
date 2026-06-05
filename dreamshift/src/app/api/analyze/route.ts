@@ -2,20 +2,28 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Dream from '@/models/Dream';
 
-const SYSTEM_PROMPT = `You are a compassionate dream therapist AI called DreamShift.
+const LANGUAGE_MAP = {
+  en: 'English',
+  ru: 'Russian',
+  kk: 'Kazakh',
+};
+
+const getSystemPrompt = (lang: string) => `You are a compassionate dream therapist AI called DreamShift.
 Respond ONLY with a valid JSON object. No markdown, no backticks, no conversational filler.
 Ensure all string values are properly escaped and wrapped in double quotes.
 
 IMPORTANT LANGUAGE RULE: 
-You MUST detect the language the user wrote their dream in, and use that EXACT SAME language for ALL output fields (empathy, analysis, core_fear, reframe, breathing_exercise, sleep_technique, affirmation, video_prompt).
+The user has requested the response in ${LANGUAGE_MAP[lang as keyof typeof LANGUAGE_MAP] || 'English'}.
+You MUST use ${LANGUAGE_MAP[lang as keyof typeof LANGUAGE_MAP] || 'English'} for ALL output fields (empathy, analysis, core_fear, reframe, breathing_exercise, sleep_technique, affirmation).
+ONLY the 'video_prompt' field must ALWAYS be in English regardless of the requested language, as it is used for an image generation tool that prefers English.
 
 IMPORTANT VIDEO PROMPT RULES:
-The 'video_prompt' field must be highly detailed for AI video generation.
-1. Extract specific characters from the dream (e.g. monsters, specific people, animals) and include them visually.
-2. Extract the main ACTION (fighting, flying, running, falling, etc.).
-3. Extract the SETTING (street, school, forest, unknown place, etc.).
-4. Always add exactly: "cartoon animation style, Ghibli-inspired, vibrant colors, smooth motion".
-5. Keep prompt under 100 words but dense with visual details.
+The 'video_prompt' field must be highly detailed for AI video generation to make the cartoon more funny, relatable, and realistic.
+1. Extract the main characters but give them funny, expressive, and slightly exaggerated features.
+2. Enhance the main ACTION to be highly dynamic, humorous, and visually engaging.
+3. Describe a rich, realistic but stylized SETTING that feels immersive and lively.
+4. Always add exactly: "high-quality 3D cartoon style, highly expressive and funny, Pixar or Dreamworks inspired aesthetic, vivid cinematic lighting, realistic textures, smooth fluid motion".
+5. Keep the prompt vivid and dense with visual details, but under 80 words.
 
 Fields to return:
 - empathy
@@ -29,11 +37,13 @@ Fields to return:
 
 export async function POST(req: Request) {
   try {
-    const { dream } = await req.json();
+    const { dream, language } = await req.json();
 
     if (!dream || typeof dream !== 'string') {
       return NextResponse.json({ error: 'Valid dream text is required' }, { status: 400 });
     }
+
+    const selectedLanguage = language || 'en';
 
     // Call GitHub Models API
     const response = await fetch('https://models.github.ai/inference/chat/completions', {
@@ -45,7 +55,7 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: getSystemPrompt(selectedLanguage) },
           { role: 'user', content: dream },
         ],
         temperature: 0.7,
@@ -82,6 +92,7 @@ export async function POST(req: Request) {
     // Save to database
     const savedDream = await Dream.create({
       dream,
+      language: selectedLanguage,
       result: parsedResult,
     });
 

@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${dmSerif.variable} antialiased bg-cream text-black font-sans min-h-screen flex flex-col`}>
+      <body className={`${inter.variable} ${dmSerif.variable} antialiased bg-navy text-milk font-sans min-h-screen flex flex-col`}>
         {children}
       </body>
     </html>

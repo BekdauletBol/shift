@@ -6,6 +6,11 @@ const DreamSchema = new Schema<DreamDocument>({
     type: String,
     required: true,
   },
+  language: {
+    type: String,
+    enum: ['en', 'ru', 'kk'],
+    default: 'en',
+  },
   result: {
     empathy: String,
     analysis: String,

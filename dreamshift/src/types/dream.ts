@@ -1,3 +1,5 @@
+export type Language = 'en' | 'ru' | 'kk';
+
 export interface DreamAnalysisResponse {
   empathy: string;
   analysis: string;
@@ -12,6 +14,7 @@ export interface DreamAnalysisResponse {
 export interface DreamDocument {
   _id?: string;
   dream: string;
+  language: Language;
   result: DreamAnalysisResponse;
   video_url?: string;
   createdAt: Date;

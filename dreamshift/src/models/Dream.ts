@@ -2,6 +2,10 @@ import mongoose, { Schema, model, models } from 'mongoose';
 import { DreamDocument } from '@/types/dream';
 
 const DreamSchema = new Schema<DreamDocument>({
+  userId: {
+    type: String,
+    index: true,
+  },
   dream: {
     type: String,
     required: true,
@@ -20,8 +24,17 @@ const DreamSchema = new Schema<DreamDocument>({
     breathing_exercise: String,
     sleep_technique: String,
     affirmation: String,
+    map_coords: {
+      lucidity: Number,
+      intensity: Number,
+    },
   },
   video_url: String,
+  isPublic: {
+    type: Boolean,
+    default: false,
+    index: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Dream from '@/models/Dream';
+import { getUserId } from '@/lib/auth';
 
 const LANGUAGE_MAP = {
   en: 'English',
@@ -33,7 +34,8 @@ Fields to return:
 - video_prompt
 - breathing_exercise
 - sleep_technique
-- affirmation`;
+- affirmation
+- map_coords (object with "lucidity" and "intensity" integers 0-100)`;
 
 export async function POST(req: Request) {
   try {
@@ -86,11 +88,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Model returned invalid JSON format' }, { status: 500 });
     }
 
+    const userId = await getUserId();
+
     // Ensure database connection
     await dbConnect();
 
     // Save to database
     const savedDream = await Dream.create({
+      userId,
       dream,
       language: selectedLanguage,
       result: parsedResult,
